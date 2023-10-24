@@ -1,7 +1,7 @@
 import { foodTags, foods } from "./food";
 import { useSearchParams } from "react-router-dom";
 
-function App() {
+export default function Menu() {
   const [searchParams, setSearchParams] = useSearchParams();
   const tag = searchParams.get("tag") ?? "All";
 
@@ -48,5 +48,3 @@ function App() {
     </>
   );
 }
-
-export default App;
