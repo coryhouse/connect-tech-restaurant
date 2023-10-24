@@ -7,6 +7,8 @@ export type Food = {
   tags: Array<FoodTag>;
 };
 
+export type NewFood = Omit<Food, "id">;
+
 export const foodTags = [
   "Breakfast",
   "Lunch",
