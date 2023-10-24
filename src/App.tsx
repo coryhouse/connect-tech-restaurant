@@ -1,8 +1,9 @@
-import { useState } from "react";
-import { FoodTag, foodTags, foods } from "./food";
+import { foodTags, foods } from "./food";
+import { useSearchParams } from "react-router-dom";
 
 function App() {
-  const [tag, setTag] = useState<FoodTag | "All">("All");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const tag = searchParams.get("tag") ?? "All";
 
   const matchingFoods =
     tag === "All" ? foods : foods.filter((food) => food.tags.includes(tag));
@@ -17,7 +18,9 @@ function App() {
       <select
         id="tag"
         value={tag}
-        onChange={(e) => setTag(e.target.value as FoodTag)}
+        onChange={(e) =>
+          setSearchParams((params) => ({ ...params, tag: e.target.value }))
+        }
       >
         <option>All</option>
         {foodTags.map((tag) => (
@@ -35,7 +38,7 @@ function App() {
             <p className="font-bold">${food.price}</p>
             <p>{food.description}</p>
             <img
-              className="h-48"
+              className="h-48 w-full object-cover"
               src={"images/" + food.image}
               alt={food.name}
             />
