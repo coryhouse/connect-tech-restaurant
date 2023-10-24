@@ -1,12 +1,26 @@
-import { foodTags, foods } from "./food";
+import { useQuery } from "@tanstack/react-query";
+import { Food, FoodTag, foodTags } from "./food";
 import { useSearchParams } from "react-router-dom";
+import { useFoods } from "./useFoods";
+import z from "zod";
+
+const urlTagSchema = z
+  .string()
+  .refine((tag) => foodTags.includes(tag as FoodTag));
 
 export default function Menu() {
   const [searchParams, setSearchParams] = useSearchParams();
   const tag = searchParams.get("tag") ?? "All";
+  urlTagSchema.parse(tag);
+
+  const { data: foods = [], isLoading } = useFoods();
 
   const matchingFoods =
-    tag === "All" ? foods : foods.filter((food) => food.tags.includes(tag));
+    tag === "All"
+      ? foods
+      : foods.filter((food) => food.tags.includes(tag as FoodTag));
+
+  if (isLoading) return <p>Loading...</p>;
 
   return (
     <>
