@@ -1,13 +1,32 @@
-import { foods } from "./food";
+import { useState } from "react";
+import { FoodTag, foodTags, foods } from "./food";
 
-// Exercise: Display food info
-// and style info and card via Tailwind
 function App() {
+  const [tag, setTag] = useState<FoodTag | "All">("All");
+
+  const matchingFoods =
+    tag === "All" ? foods : foods.filter((food) => food.tags.includes(tag));
+
   return (
     <>
       <h1>Menu</h1>
+
+      <label className="block" htmlFor="tag">
+        Filter by Tag
+      </label>
+      <select
+        id="tag"
+        value={tag}
+        onChange={(e) => setTag(e.target.value as FoodTag)}
+      >
+        <option>All</option>
+        {foodTags.map((tag) => (
+          <option key={tag}>{tag}</option>
+        ))}
+      </select>
+
       <div className="flex flex-wrap">
-        {foods.map((food) => (
+        {matchingFoods.map((food) => (
           <div
             className="bg-slate-200 shadow-lg m-2 w-96 border p-2 rounded"
             key={food.id}
